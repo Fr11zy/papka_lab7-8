@@ -117,6 +117,16 @@ int main()
         }
     }
 
+    std::cout << "Would you like to know information about books in library?" <<std::endl;
+    std::cin >> answer;
+    if (answer=="Yes")
+    {
+        std::cout << "Enter number of book from library(0-" << librarySize << ")" << std::endl;
+        int numberOfBook;
+        std::cin >> numberOfBook;
+        std::cout << library[numberOfBook] << std::endl;
+    }
+
     std::cout << "We finish the demonstration of the library's work." << std::endl;
 
     // Deallocate memory for the library
