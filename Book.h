@@ -53,7 +53,7 @@ class Book
         // Implementation of overloaded operators
         friend std::ostream& operator<<(std::ostream& out, const Book& book)
         {
-            out << "Title: " << book.title << "\nAuthor: " << book.author << "\nISBN: " << book.ISBN;
+            out << "Title: " << book.title << "\nAuthor: " << book.author << "\nISBN: " << book.ISBN << std::endl;
             return out;
         }
 

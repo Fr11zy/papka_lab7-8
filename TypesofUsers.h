@@ -30,6 +30,12 @@ class Member : public User
         {
             book->returnBook();
         }
+
+        friend std::ostream& operator<<(std::ostream &out,const Member &member)
+        {
+            out << "Member's name is " << member.getUsername() << std::endl; 
+            return out;
+        }
 };
 
 #endif //Member_h
@@ -99,6 +105,12 @@ class Librarian : public User
             library = newLibrary;
 
             std::cout << "Book added to the library successfully!\n";
+        }
+
+        friend std::ostream& operator<<(std::ostream &out,const Librarian &librarian)
+        {
+            out << "Librarian's name is " << librarian.getUsername() << std::endl; 
+            return out;
         }
 };
 #endif //Librarian_h

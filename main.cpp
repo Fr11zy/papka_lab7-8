@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 #include "Book.h"
 #include "TypesofUsers.h"
@@ -6,12 +7,16 @@
 
 int main()
 {
+    //Open File for library
+    std::ofstream libraryFile;
+    libraryFile.open("File.txt");
     // Example usage
     std::cout << "How many books on library you want?" << std::endl;
     int librarySize;
     std::cin >> librarySize;
     Librarian librarian("John");
     Book* library = new Book[librarySize];
+    libraryFile << "Books in library:" << std::endl;
     for (int i=0;i<librarySize;++i)
     {
         std::string title, author, isbn;
@@ -26,13 +31,17 @@ int main()
         std::cout << std::endl;
         Book newBook(title, author, isbn);
         library[i]=newBook;
+        libraryFile << (i+1) << ")"<< library[i];
     }
+
+    libraryFile << librarian;
 
     std::cout << "How many members would you like to add?" << std::endl;
     int kolOfMembers;
     std::cin >> kolOfMembers;
     Loan *loaners=new Loan[kolOfMembers];
     Member *members=new Member[kolOfMembers];
+    libraryFile << "Members in library:" << std::endl;
     for (int i=0;i<kolOfMembers;++i)
     {
         std::string username;
@@ -42,6 +51,7 @@ int main()
         members[i]=member_for_list;
         Loan loan_for_list(username,0);
         loaners[i]=loan_for_list;
+        libraryFile << (i+1) << ") " << members[i];
     }
 
     // Librarian adds a new book
@@ -53,10 +63,17 @@ int main()
         std::cout << "How many books do you want to add?" << std::endl;
         int N;
         std::cin >> N;
+        libraryFile << "Today " << N << " books was added to library." << std::endl;
+        libraryFile << "Books that was added:" << std::endl;
         for (int i=0;i<N;++i) 
         {
             librarian.addBook(library, librarySize);
+            libraryFile << library[librarySize-1];
         }
+    }
+    else
+    {
+        libraryFile << "Today there are no books to add." << std::endl;
     }
     
     std::cout << "Let's show the work of borrowing and returning books" << std::endl;
@@ -69,6 +86,8 @@ int main()
         std::cout << "How many members want to borrow book?" << std::endl;
         int N;
         std::cin >> N;
+        libraryFile << "There are "<< N << "books were borrowed." << std::endl;
+        libraryFile << "Members which borrow books: " << std::endl;
         for (int i=0;i<N;++i)
         {
             std::cout << "Who want to borrow book from library?" <<std::endl;
@@ -83,10 +102,16 @@ int main()
                 if (members[i].getUsername()==name)
                 {
                     members[i].borrowBook(&library[numberOfBook]);
+                    libraryFile << "Member " << (i+1) << " borrowed 1 book:" << std::endl << library[numberOfBook];  
                     loaners[i].addToKolOfBooks();
+                    libraryFile << "Now Member " << (i+1) << " has " << loaners[i].getKolOfBooks() << " borrowing books." << std::endl;
                 }
             }
         }
+    }
+    else
+    {
+        libraryFile << "Today is is no books were borrowed." << std::endl;
     }
     
     std::cout << "Does somebody want to return book?" <<std::endl;
@@ -97,6 +122,8 @@ int main()
         std::cout << "How many members want to return book?" << std::endl;
         int N;
         std::cin >> N;
+        libraryFile << "There are "<< N << "books were returned." << std::endl;
+        libraryFile << "Members which return books: " << std::endl;
         for (int i=0;i<N;++i)
         {
             std::cout << "Who want to return book from library?" <<std::endl;
@@ -111,10 +138,16 @@ int main()
                 if (members[i].getUsername()==name)
                 {
                     members[i].returnBook(&library[numberOfBook]);
-                    loaners[i].minusKolOfBooks();    
+                    libraryFile << "Member " << (i+1) << " return 1 book:" << std::endl << library[numberOfBook];  
+                    loaners[i].minusKolOfBooks();
+                    libraryFile << "Now Member " << (i+1) << " has " << loaners[i].getKolOfBooks() << " borrowing books." << std::endl;    
                 }    
             }
         }
+    }
+    else
+    {
+        libraryFile << "Today is is no books were returned." << std::endl;
     }
 
     std::cout << "Would you like to know information about books in library?" <<std::endl;
@@ -129,8 +162,13 @@ int main()
 
     std::cout << "We finish the demonstration of the library's work." << std::endl;
 
+    libraryFile << "Finish the day." << std::endl;
+
     // Deallocate memory for the library
     delete[] library;
 
+    //Close File for library
+    libraryFile.close();
+
     return 0;
-}
+}    
